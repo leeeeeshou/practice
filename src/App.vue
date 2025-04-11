@@ -9,6 +9,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/post">post</RouterLink>
         <RouterLink to="/addpost">addpost</RouterLink>
+        <RouterLink to="/postpage">postpage</RouterLink>
       </nav>
 
 <div class="view-area">
@@ -48,12 +49,14 @@ nav a:first-of-type {
   border: 0;
 }
 .view-area{
-  width: 90%;
-  border: 1px solid #000;
+  /*background: linear-gradient(black 1.5px, transparent 0),
+    linear-gradient(90deg, black 1.5px, transparent 0);
+  background-size: 100% 40px, 40px 100%, 100% 200px, 200px 100%;*/
+  width: 100%;
   height: 100vh;
-  padding: 30px;
   margin-left: auto;
   margin-right: auto;
+  overflow: auto;
 }
 
 @media (min-width: 1024px) {
