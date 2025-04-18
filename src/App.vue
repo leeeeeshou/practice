@@ -10,6 +10,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/post">post</RouterLink>
         <RouterLink to="/addpost">addpost</RouterLink>
         <RouterLink to="/postpage">postpage</RouterLink>
+        <RouterLink to="/news">news</RouterLink>
       </nav>
 
 <div class="view-area">
@@ -57,7 +58,10 @@ nav a:first-of-type {
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
+display: flex;
+justify-content: center;
 }
+
 
 @media (min-width: 1024px) {
 
