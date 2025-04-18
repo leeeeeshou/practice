@@ -1,5 +1,9 @@
 <template>
     <div>
+
+
+
+        
       <input type="file" @change="handleFileChange" accept="image/*" :disabled="isUploading">
   
       <button @click="uploadImage" :disabled="!selectedFile || isUploading">
