@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/matter-js@0.18.0/build/matter.min.js"></script>
+
+<div class="page"></div>
+<div class="matterArea">
+  <canvas id="worldCanvas"></canvas>
+</div>
+<div class="resetBotton">Reset</div>
+<div class="canva">
+</div>
+
+<div class="skillBox" id='skillbox1'>
+  <div class="skill">Poor value</div>
+</div>
+<div class="skillBox" id='skillbox2'>
+  <div class="skill">Amenities</div>
+</div>
+<div class="skillBox" id='skillbox3'>
+  <div class="skill">Small Room</div>
+</div>
+<div class="skillBox" id='skillbox4'>
+  <div class="skill">Soft Pillow</div>
+</div>
+<div class="skillBox" id='skillbox5'>
+  <div class="skill">Less Parking Space</div>
+</div>
+<div class="skillBox" id='skillbox6'>
+  <div class="skill">Outdated</div>
+</div>
+<div class="skillBox" id='skillbox7'>
+  <div class="skill">Location</div>
+</div>
+<div class="skillBox" id='skillbox8'>
+  <div class="skill">Misleading Photos</div>
+</div>
+
+
+<div class="title cookie-regular">
+  Customer Feedback
+</div>
+
+<div class="cnava-title">
+  <div class="MatterSubContent">123</div>
+  <div class='titleHr' id='bottomHr'></div>
+  <div class='titleHr' id='leftHr'></div>
+  <div class='titleHr' id='rightHr'></div>
+  <div class="contentNumner">
+    Postitive 15352
+  </div>
+</div>
+</body>
+</html>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
+.cookie-regular {
+  font-family: "Cookie", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+*{
+  box-sizing:border-box
+}
+:root{
+ --bg--color:#faf7f0;
+--text--color:#202225;
+}
+body{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--text--color); 
+}
+.page{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background:
+        linear-gradient(var(--bg--color) 1.5px, transparent 0),
+        linear-gradient(90deg, var(--bg--color) 1.5px, transparent 0);
+    background-size: 100% 40px, 40px 100%, 100% 200px, 200px 100%;
+  
+}
+.skillBox{
+  padding:0px 1px;
+  height: 40px;
+  border: 1px solid #000;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg--color);
+  position: absolute;
+  pointer-events:none;
+  z-index: 10;
+}
+
+.skill{
+  width: 95%;
+  height: 80%;
+  border: 2px solid var(--text--color);
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:var(--text--color);
+  letter-spacing:3px;
+  font-size: 1.2rem;
+  padding:0px 10px;
+  white-space: nowrap;
+}
+
+
+
+.matterArea{
+  border: 1px solid #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+canvas{
+  position: fixed;
+  left: 10px;
+
+}
+
+.title{
+  width: 319px;
+  height: 79px;
+  position: absolute;
+  left: 209px;
+  top: 49px;
+  font-size: 3rem;
+  background-color: var(--text--color);
+  color:var(--bg--color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  pointer-events:none;
+}
+.cnava-title{
+  width: 280px;
+  height: 0px;
+  background-color: var(--bg--color);
+  position: fixed;
+  top: 120px;
+  left: 228px;
+  transition:0.5s;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events:none;
+}
+.titleHr{
+  position: absolute;
+  border: 1px solid var(--text--color);
+}
+#bottomHr{
+  bottom: 20px;
+  width: 100%;
+  height: 0;
+}
+#leftHr{
+  top: 0;
+  left: 19px;
+  width: 0px;
+  height: 100%;
+}
+#rightHr{
+  top: 0;
+  right: 19px;
+  width: 0px;
+  height: 100%;
+}
+.contentNumner{
+  position: absolute;
+  color:var(--text--color);
+  bottom: 1%;
+  left: 50%;
+  transform:translatex(-50%);
+  letter-spacing:3px;
+  width: 100%;
+  text-align: center;
+  font-weight: 850;
+  font-size: 0.8rem;
+}
+.MatterSubContent{
+  position: absolute;
+  left: 50%;
+  transform:translatex(-50%);
+  top: 10%;
+  color:var(--text--color);
+  font-size: 1.8rem;
+  width: 100%;
+  text-align: center;
+}
+.resetBotton{
+  width: 80px;
+  height: 40px;
+  background-color: var(--text--color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  font-size: 1.2rem;
+  color:var(--bg--color)
+}
+</style>
+
+<script>
+// --- 基礎設定 ---
+const canva = document.querySelector(".canva");
+const skillBox = document.querySelectorAll(".skillBox");
+const matterArea = document.querySelector(".matterArea");
+
+const engine = Matter.Engine.create();
+const world = engine.world;
+const canvas = document.getElementById("worldCanvas");
+
+engine.world.gravity.y = 1;
+
+// 創建渲染器
+const render = Matter.Render.create({
+    element: canvas.parentElement,
+    engine: engine,
+    options: {
+        width: 750,
+        height: 580,
+        wireframes: false,
+        background: "rgba(0, 0, 0, 0)"
+    }
+});
+
+// 創建靜態地面和牆壁
+const ground = Matter.Bodies.rectangle(280, 578, 880, 20, { isStatic: true, render: { fillStyle: "rgba(0, 0, 0, 0)" } });
+const wallleft = Matter.Bodies.rectangle(-10, 360, 20, 730, { isStatic: true, render: { fillStyle: "rgba(0, 0, 0, 0)" } });
+const wallright = Matter.Bodies.rectangle(730, 360, 20, 730, { isStatic: true, render: { fillStyle: "rgba(0, 0, 0, 0)" } });
+
+// 創建滑鼠約束
+const mouse = Matter.Mouse.create(render.canvas);
+const mouseConstraint = Matter.MouseConstraint.create(engine, {
+    mouse: mouse,
+    constraint: {
+        stiffness: 0.2,
+        render: { visible: false }
+    }
+});
+
+// --- 資料設定 ---
+const feedbackContent = [
+    { feedback: "停車位置太少", type: "Negative", number: "365" },
+    { feedback: "沒有提供免費備品", type: "Negative", number: "342" },
+    { feedback: "房間狹小", type: "Negative", number: "307" },
+    { feedback: "枕頭太軟", type: "Negative", number: "306" },
+    { feedback: "CP值低", type: "Negative", number: "349" },
+    { feedback: "設施陳舊", type: "Negative", number: "349" },
+    { feedback: "位置難找", type: "Negative", number: "350" },
+    { feedback: "跟廣告有落差", type: "Negative", number: "343" }
+
+];
+
+
+// =================================================================
+// ===== 1. 將 Box 和 Ball 的設定結構化 =====
+// =================================================================
+
+// 存放所有動態物理物件的陣列 (使用 let 因為它們會在重置時被重新賦值)
+let matterBoxes = [];
+let matterBalls = [];
+
+// Box 的設定檔陣列：集中管理所有 box 的屬性，方便維護
+const boxConfigs = [
+    // 加上 id, dataIndex 和 style 的偏移量 (xOffset, yOffset)
+    { id: "skillbox1", x: 400, y: -400, w: 120, h: 40, dataIndex: 4, restitution: 0.9, xOffset: 70, yOffset: 20 },
+    { id: "skillbox2", x: 120, y: 280, w: 115, h: 40, dataIndex: 1, restitution: 0.8, xOffset: 60, yOffset: 20 },
+    { id: "skillbox3", x: 180, y: 280, w: 140, h: 40, dataIndex: 2, restitution: 0.8, xOffset: 75, yOffset: 20 },
+    { id: "skillbox4", x: 180, y: -1480, w: 130, h: 40, dataIndex: 3, restitution: 0.8, xOffset: 75, yOffset: 20 },
+    { id: "skillbox5", x: 180, y: -1680, w: 210, h: 40, dataIndex: 0, restitution: 0.8, xOffset: 120, yOffset: 20 },
+    { id: "skillbox6", x: 380, y: -880, w: 110, h: 40, dataIndex: 5, restitution: 0.8, xOffset: 60, yOffset: 20 },
+    { id: "skillbox7", x: 380, y: 80, w: 110, h: 40, dataIndex: 6, restitution: 0.8, xOffset: 65, yOffset: 20 },
+    { id: "skillbox8", x: 680, y: -980, w: 200, h: 40, dataIndex: 7, restitution: 0.8, xOffset: 105, yOffset: 20 }
+];
+
+// Ball 的設定檔陣列 (與你的程式碼相同)
+const ballsConfig = [
+    { x: 100, y: 50, radius: 30 }, { x: 200, y: 100, radius: 20 }, { x: 300, y: 150, radius: 40 },
+    { x: 400, y: 200, radius: 20 }, { x: 500, y: 250, radius: 35 }, { x: 210, y: 250, radius: 15 },
+    { x: 460, y: 250, radius: 15 }, { x: 420, y: 250, radius: 25 }, { x: 420, y: -650, radius: 35 },
+    { x: 120, y: -850, radius: 15 }, { x: 220, y: -800, radius: 25 }, { x: 320, y: -750, radius: 25 },
+    { x: 420, y: -650, radius: 25 }, { x: 620, y: -550, radius: 25 }, { x: 520, y: -150, radius: 25 }
+];
+
+
+// =================================================================
+// ===== 2. 建立一個統一的設定/重置函式 =====
+// =================================================================
+
+function resetSimulation() {
+    // 1. 清空世界中所有的物理引擎物件
+    Matter.World.clear(world);
+    
+    // 2. 清空存放物件參考的陣列
+    matterBoxes = [];
+    matterBalls = [];
+
+    // 3. 根據設定檔重新建立所有的 Box
+    matterBoxes = boxConfigs.map(config => {
+        const box = Matter.Bodies.rectangle(config.x, config.y, config.w, config.h, {
+            restitution: config.restitution,
+            render: { fillStyle: "rgba(255, 255, 255, 0)" }
+        });
+        // **關鍵**：將相關的 DOM 元素和資料直接附加到物理物件上，方便後續取用
+        box.domElement = document.getElementById(config.id);
+        box.feedbackData = feedbackContent[config.dataIndex];
+        box.xOffset = config.xOffset;
+        box.yOffset = config.yOffset;
+        return box;
+    });
+
+    // 4. 根據設定檔重新建立所有的 Ball
+    matterBalls = ballsConfig.map(config => {
+        return Matter.Bodies.circle(config.x, config.y, config.radius, {
+            restitution: 0.6,
+            render: { fillStyle: "rgba(250, 247, 240, 1)" }
+        });
+    });
+
+    // 5. 將所有物件 (包括靜態的牆和地面) 加回世界
+    Matter.World.add(world, [
+        ground, wallleft, wallright,
+        ...matterBoxes, // 使用展開運算符 (...) 加入所有 box
+        ...matterBalls, // 加入所有 ball
+        mouseConstraint
+    ]);
+}
+
+
+// =================================================================
+// ===== 3. 簡化綁定、更新與事件監聽 =====
+// =================================================================
+
+// 綁定 HTML 與 Matter.js (使用迴圈，不再需要一個個寫)
+function updateDOMPositions() {
+    const canvasRect = render.canvas.getBoundingClientRect();
+    matterBoxes.forEach(box => {
+        const { x, y } = box.position;
+        const rotation = box.angle * (180 / Math.PI);
+
+        // 從 box 物件上直接取得對應的 DOM 元素和偏移量
+        const domElement = box.domElement;
+        if (domElement) {
+            domElement.style.left = `${x + canvasRect.left - box.xOffset}px`;
+            domElement.style.top = `${y + canvasRect.top - box.yOffset}px`;
+            domElement.style.transform = `rotate(${rotation}deg)`;
+        }
+    });
+}
+
+Matter.Events.on(engine, "afterUpdate", updateDOMPositions);
+
+// 設定物件開關
+const matterSubtitle = document.querySelector('.cnava-title');
+const MatterSubContent = document.querySelector('.MatterSubContent');
+const contentNumner = document.querySelector('.contentNumner');
+
+const openMatterSubtitle = (text, attitude, number) => {
+    matterSubtitle.style.height = '70px';
+    MatterSubContent.innerText = text;
+    contentNumner.innerText = attitude + "  " + number;
+}
+const closeMatterSubtitle = () => {
+    matterSubtitle.style.height = '0px';
+}
+
+// 事件監聽 (使用迴圈，不再需要一長串 if)
+Matter.Events.on(mouseConstraint, 'mousedown', function (event) {
+    const mousePosition = event.mouse.position;
+    // 遍歷所有 matterBoxes，檢查滑鼠是否點擊在其中一個上
+    for (const box of matterBoxes) {
+        if (Matter.Vertices.contains(box.vertices, mousePosition)) {
+            // 從 box 上直接取得 feedback 資料
+            const data = box.feedbackData;
+            openMatterSubtitle(data.feedback, data.type, data.number);
+            break; // 找到後就跳出迴圈，增加效率
+        }
+    }
+});
+
+Matter.Events.on(mouseConstraint, 'mouseup', function (event) {
+    closeMatterSubtitle();
+});
+
+
+// =================================================================
+// ===== 4. 啟動與重置按鈕 =====
+// =================================================================
+
+// 啟動渲染和引擎
+Matter.Render.run(render);
+Matter.Engine.run(engine);
+
+// 第一次載入時，執行一次來建立所有物件
+resetSimulation();
+
+// 重新渲染按鈕
+const resetBotton = document.querySelector('.resetBotton');
+resetBotton.addEventListener('click', () => {
+    // 點擊時，直接呼叫重置函式即可，邏輯非常乾淨
+    resetSimulation();
+});
+</script>
